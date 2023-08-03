@@ -21,4 +21,8 @@ public class TickerService {
         return tickerRepository.get(tickerId);
     }
 
+    public boolean isValid(String tickerId){
+        return true;
+    }
+
 }

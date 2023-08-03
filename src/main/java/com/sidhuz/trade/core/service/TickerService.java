@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TickerService {
@@ -13,16 +14,8 @@ public class TickerService {
     @Autowired
     private TickerRepository tickerRepository;
 
-    public List<Ticker> getAll () {
-        return tickerRepository.getAll();
-    }
-
-    public Ticker get(String tickerId) {
-        return tickerRepository.get(tickerId);
-    }
-
     public boolean isValid(String tickerId){
-        return true;
+        return Objects.nonNull(tickerRepository.get(tickerId));
     }
 
 }

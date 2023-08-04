@@ -1,16 +1,21 @@
 package com.sidhuz.trade.core.service;
 
+import com.sidhuz.trade.core.repository.HoldingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HoldingService {
 
+    @Autowired
+    private HoldingRepository holdingRepository;
+
     public int getHoldingQty(int customerId, String tickerId){
-        return 500;
+        return holdingRepository.getQty(customerId, tickerId);
     }
 
     public void saveSellOrder(int customerId, String tickerId, int qty){
-        //TODO: Update In-Transit Quantity on Customer Holding when a Sell Order is Placed.
+        holdingRepository.save(customerId, tickerId, -1*qty, qty);
     }
 
     public void saveBuyTrade(int customerId, String tickerId, int qty){

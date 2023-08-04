@@ -7,6 +7,7 @@ import com.sidhuz.trade.core.service.OrderService;
 import com.sidhuz.trade.core.service.TickerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class OrderProcessor {
@@ -23,6 +24,7 @@ public class OrderProcessor {
     @Autowired
     private TickerService tickerService;
 
+    @Transactional
     public void process(Order order){
         if(validateOrder(order)) {
             saveOrder(order);
@@ -34,7 +36,7 @@ public class OrderProcessor {
     }
 
     private void saveOrder(Order order){
-        orderService.save(order);
+        orderService.saveNew(order);
         if (order.isSellOrder()) {
             holdingService.saveSellOrder(order.getCustomerId(), order.getTickerId(), order.getOrderQty());
         }

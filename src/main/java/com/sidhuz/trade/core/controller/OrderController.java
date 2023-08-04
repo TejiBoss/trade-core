@@ -22,7 +22,7 @@ public class OrderController {
     @PostMapping(path = "/process", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> saveOrder(@RequestBody Order order) {
         orderProcessor.process(order);
-        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+        return new ResponseEntity<>("SUCCESS " + order.getOrderId() + " created.", HttpStatus.OK);
     }
 
 }

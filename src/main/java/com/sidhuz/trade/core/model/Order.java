@@ -24,7 +24,7 @@ public class Order {
     private int orderQty;
     private double orderPrice;
     private String orderStatus;
-    private LocalDateTime orderDate;
+    private LocalDateTime orderTs;
 
     public boolean isValidOrderType(){
         return ALL_ORDER_TYPES.contains(this.orderType.toUpperCase());

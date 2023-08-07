@@ -20,6 +20,7 @@ public class TickerRepository {
             " select ticker_id, ticker_name, last_ticker_price, action_ts " +
             "   from ticker " +
             "  where ticker_id = :tickerId";
+
     public Ticker get (String tickerId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("tickerId", tickerId);

@@ -10,12 +10,12 @@ public class HoldingService {
     @Autowired
     private HoldingRepository holdingRepository;
 
-    public int getHoldingQty(int customerId, String tickerId){
-        return holdingRepository.getQty(customerId, tickerId);
+    public int getOpenQty(int customerId, String tickerId){
+        return holdingRepository.getOpenQty(customerId, tickerId);
     }
 
     public void saveSellOrder(int customerId, String tickerId, int qty){
-        holdingRepository.save(customerId, tickerId, -1*qty, qty);
+        holdingRepository.save(customerId, tickerId, 0, qty);
     }
 
     public void saveBuyTrade(int customerId, String tickerId, int qty){

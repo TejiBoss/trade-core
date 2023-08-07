@@ -19,7 +19,14 @@ public class OrderRepository {
     @Autowired
     private NamedParameterJdbcTemplate npjt;
 
-    private static final String INSERT_ORDER = " " + "  insert into customer_order ( " + "    customer_id, order_type, ticker_id, order_price, order_qty, " + "    order_ts, order_status, action_ts " + "  ) values ( " + "    :customerId, :orderType, :tickerId, :orderPrice, :orderQty, " + "    :orderTs, :orderStatus, :actionTs " + "  ) ";
+    private static final String INSERT_ORDER = " " +
+            " insert into customer_order ( " +
+            "    customer_id, order_type, ticker_id, order_price, order_qty, " +
+            "    order_ts, order_status, action_ts " +
+            "  ) values ( " +
+            "    :customerId, :orderType, :tickerId, :orderPrice, :orderQty, " +
+            "    :orderTs, :orderStatus, :actionTs " +
+            "  ) ";
 
     public int insert(Order order) {
         MapSqlParameterSource params = new MapSqlParameterSource();

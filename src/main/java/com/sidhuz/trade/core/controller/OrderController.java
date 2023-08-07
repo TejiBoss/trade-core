@@ -19,10 +19,15 @@ public class OrderController {
     @Autowired
     private OrderProcessor orderProcessor;
 
-    @PostMapping(path = "/process", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveOrder(@RequestBody Order order) {
-        orderProcessor.process(order);
-        return new ResponseEntity<>("SUCCESS " + order.getOrderId() + " created.", HttpStatus.OK);
+    @PostMapping(path = "/submit", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> submit(@RequestBody Order order) {
+        orderProcessor.submit(order);
+        return new ResponseEntity<>("SUCCESS " + order.getOrderId() + " submitted.", HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/cancel", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> cancel(@RequestBody Order order){
+        return new ResponseEntity<>("SUCCESS " + order.getOrderId() + " canceled.", HttpStatus.OK);
     }
 
 }

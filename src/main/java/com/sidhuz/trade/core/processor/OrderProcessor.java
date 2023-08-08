@@ -26,28 +26,37 @@ public class OrderProcessor {
     private TickerService tickerService;
 
     @Transactional
-    public void submit(Order order){
-        if(validateOrder(order)) {
+    public void submit(Order order) {
+        if (validateOrder(order)) {
             order.setOrderStatus(Constants.SUBMITTED);
             saveOrder(order);
         }
     }
 
-    private boolean validateOrder(Order order){
+    @Transactional
+    public void cancel(Order order) {
+        if (orderService.isValid(order)) {
+            orderService.cancel(order.getOrderId());
+        } else {
+            throw new RuntimeException("Order cannot be canceled at this time. Please contact support.");
+        }
+    }
+
+    private boolean validateOrder(Order order) {
         validateCustomerId(order.getCustomerId());
         validateTickerId(order.getTickerId());
         validateQty(order);
         return true;
     }
 
-    private void saveOrder(Order order){
-        orderService.saveNew(order);
+    private void saveOrder(Order order) {
+        orderService.submit(order);
         if (order.isSellOrder()) {
             holdingService.saveSellOrder(order.getCustomerId(), order.getTickerId(), order.getOrderQty());
         }
     }
 
-    private void validateQty (Order order) {
+    private void validateQty(Order order) {
         if (order.getOrderQty() <= 0) {
             throw new RuntimeException("Invalid Qty for an order " + order.getOrderQty());
         }
@@ -60,14 +69,14 @@ public class OrderProcessor {
         }
     }
 
-    private void validateTickerId (String tickerId) {
+    private void validateTickerId(String tickerId) {
         if (!tickerService.isValid(tickerId)) {
             throw new RuntimeException("Invalid ticker id on the order " + tickerId);
         }
     }
 
-    private void validateCustomerId (int customerId) {
-        if (!customerService.isValid(customerId)){
+    private void validateCustomerId(int customerId) {
+        if (!customerService.isValid(customerId)) {
             throw new RuntimeException("Invalid customer id on the order " + customerId);
         }
     }

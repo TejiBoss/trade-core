@@ -27,6 +27,7 @@ public class OrderController {
 
     @PostMapping(path = "/cancel", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> cancel(@RequestBody Order order){
+        orderProcessor.cancel(order);
         return new ResponseEntity<>("SUCCESS " + order.getOrderId() + " canceled.", HttpStatus.OK);
     }
 

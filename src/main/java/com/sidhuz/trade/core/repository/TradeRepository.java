@@ -40,7 +40,6 @@ public class TradeRepository {
         params.addValue("actionTs", LocalDateTime.now(), JDBCType.TIMESTAMP.getVendorTypeNumber());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         npjt.update(SAVE_TRADE, params, keyHolder);
-        return 1;
-        //return (int) Objects.requireNonNull(keyHolder.getKeys()).get("trade_id");
+        return (int) Objects.requireNonNull(keyHolder.getKeys()).get("trade_id");
     }
 }

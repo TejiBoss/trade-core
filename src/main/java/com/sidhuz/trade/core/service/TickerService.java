@@ -1,11 +1,9 @@
 package com.sidhuz.trade.core.service;
 
-import com.sidhuz.trade.core.model.Ticker;
 import com.sidhuz.trade.core.repository.TickerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service

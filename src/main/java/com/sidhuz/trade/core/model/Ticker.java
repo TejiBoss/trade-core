@@ -8,6 +8,5 @@ import java.time.LocalDateTime;
 public class Ticker {
     private String tickerId;
     private String tickerName;
-    private double lastTickerPrice;
     private LocalDateTime actionTs;
 }

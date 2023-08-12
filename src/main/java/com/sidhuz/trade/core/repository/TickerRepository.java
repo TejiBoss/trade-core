@@ -17,7 +17,7 @@ public class TickerRepository {
     private NamedParameterJdbcTemplate npjt;
 
     private static final String TICKER_QUERY = " " +
-            " select ticker_id, ticker_name, last_ticker_price, action_ts " +
+            " select ticker_id, ticker_name, action_ts " +
             "   from ticker " +
             "  where ticker_id = :tickerId";
 

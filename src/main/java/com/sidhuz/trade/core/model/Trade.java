@@ -22,5 +22,12 @@ public class Trade {
 
     public Trade (Order buyOrder, Order sellOrder) {
         this.tickerId = buyOrder.getTickerId();
+        this.tradePrice = buyOrder.getOrderPrice();
+        this.tradeTs = LocalDateTime.now();
+        this.tradeQty = buyOrder.getOrderQty();
+        this.buyCustomerId = buyOrder.getCustomerId();
+        this.sellCustomerId = sellOrder.getCustomerId();
+        this.buyOrderId = buyOrder.getOrderId();
+        this.sellOrderId = sellOrder.getOrderId();
     }
 }

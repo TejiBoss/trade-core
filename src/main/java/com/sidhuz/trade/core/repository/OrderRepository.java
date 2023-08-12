@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import java.sql.JDBCType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static com.sidhuz.trade.core.utils.Constants.SUBMITTED;
 
@@ -40,7 +41,31 @@ public class OrderRepository {
             " update customer_order " +
             "    set order_status = :orderStatus, " +
             "        action_ts = :actionTs " +
-            "  where order_id = :orderId";
+            "  where order_id = :orderId ";
+
+    private static final String UPDATE_ORDER_STATUS_WITH_CHECK = " " +
+            " update customer_order " +
+            "    set order_status = :orderStatus, " +
+            "        action_ts = :actionTs " +
+            "  where order_id = :orderId " +
+            "    and order_status = :checkOrderStatus ";
+
+    private static final String GET_ALL_OPEN_ORDERS = " " +
+            " select order_id, customer_id, order_type, ticker_id, order_price, order_qty, order_ts, order_status " +
+            "   from customer_order " +
+            "  where order_type = 'BUY' " +
+            "    and order_status = 'SUBMITTED' " +
+            "  order by order_ts ";
+
+    private static final String FIND_MATCHING_SELL_ORDER = " " +
+            " select order_id, customer_id, order_type, ticker_id, order_price, order_qty, order_ts, order_status " +
+            "  from customer_order " +
+            " where order_type = 'SELL' " +
+            "   and order_status = 'SUBMITTED' " +
+            "   and ticker_id = :tickerId " +
+            "   and order_price <= :orderPrice " +
+            "   and order_qty = :orderQty " +
+            " order by order_ts ";
 
     public int insert(Order order) {
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -54,7 +79,7 @@ public class OrderRepository {
         params.addValue("actionTs", LocalDateTime.now(), JDBCType.TIMESTAMP.getVendorTypeNumber());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         npjt.update(INSERT_ORDER, params, keyHolder);
-        return (int) keyHolder.getKeys().get("order_id");
+        return (int) Objects.requireNonNull(keyHolder.getKeys()).get("order_id");
     }
 
     public Order get(int orderId) {
@@ -73,5 +98,26 @@ public class OrderRepository {
         params.addValue("orderStatus", orderStatus);
         params.addValue("actionTs", LocalDateTime.now(), JDBCType.TIMESTAMP.getVendorTypeNumber());
         npjt.update(UPDATE_ORDER_STATUS, params);
+    }
+
+    public int updateStatusWithCheck(int orderId, String orderStatus, String checkOrderStatus) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("orderId", orderId);
+        params.addValue("orderStatus", orderStatus);
+        params.addValue("actionTs", LocalDateTime.now(), JDBCType.TIMESTAMP.getVendorTypeNumber());
+        params.addValue("checkOrderStatus", checkOrderStatus);
+        return npjt.update(UPDATE_ORDER_STATUS_WITH_CHECK, params);
+    }
+
+    public List<Order> getOpenBuyOrders(){
+        return npjt.query(GET_ALL_OPEN_ORDERS, new MapSqlParameterSource(), new BeanPropertyRowMapper<>(Order.class));
+    }
+
+    public List<Order> findMatchingSellOrder (Order buyOrder) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("tickerId", buyOrder.getTickerId());
+        params.addValue("orderQty", buyOrder.getOrderQty());
+        params.addValue("orderPrice", buyOrder.getOrderPrice());
+        return npjt.query(FIND_MATCHING_SELL_ORDER, params, new BeanPropertyRowMapper<>(Order.class));
     }
 }

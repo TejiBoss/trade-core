@@ -5,8 +5,8 @@ import com.sidhuz.trade.core.repository.OrderRepository;
 import com.sidhuz.trade.core.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,14 +38,29 @@ public class OrderService {
     }
 
     public boolean lock (int orderId) {
-        return true;
+        int rowsUpdated = orderRepository.updateStatusWithCheck(orderId, Constants.PROCESSING, Constants.SUBMITTED);
+        return rowsUpdated > 0;
     }
 
     public List<Order> getOpenBuyOrders(){
-        return null;
+        return orderRepository.getOpenBuyOrders();
     }
 
-    public Order findSellOrder (Order buyOrder) {
+    public void updateStatus (int orderId, String status) {
+        orderRepository.updateStatus(orderId, status);
+    }
+
+    public Order findMatchingSellOrder(Order buyOrder) {
+        List<Order> sellOrders = orderRepository.findMatchingSellOrder(buyOrder);
+        if (CollectionUtils.isEmpty(sellOrders)) {
+            return null;
+        }
+
+        for (Order order : sellOrders) {
+            if (lock(order.getOrderId())) {
+                return order;
+            }
+        }
         return null;
     }
 

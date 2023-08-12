@@ -19,10 +19,10 @@ public class HoldingService {
     }
 
     public void saveBuyTrade(int customerId, String tickerId, int qty){
-        //TODO: Update Final Quantity on Customer Holding when a trade is Executed.
+        holdingRepository.save(customerId, tickerId, qty, 0);
     }
 
     public void saveSellTrade(int customerId, String tickerId, int qty){
-        //TODO: Update In-Transit Quantity and Final Quantity  on Customer Holding when a Sell Trade is Completed.
+        holdingRepository.save(customerId, tickerId, (qty * -1), (qty * -1));
     }
 }

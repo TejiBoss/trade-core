@@ -27,6 +27,7 @@ public class TradeProcessor {
 
     private void execute (Order buyOrder) {
         try {
+            System.out.println("Order: " + buyOrder.toString());
             tradeExecutor.execute(buyOrder);
         } catch (Exception e) {
             log.error("Error during execution of trade for buy order id " + buyOrder.getOrderId(), e);

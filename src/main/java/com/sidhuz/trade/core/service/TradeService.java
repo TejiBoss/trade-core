@@ -1,6 +1,5 @@
 package com.sidhuz.trade.core.service;
 
-import com.sidhuz.trade.core.model.Order;
 import com.sidhuz.trade.core.model.Trade;
 import com.sidhuz.trade.core.repository.TradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ public class TradeService {
     private TradeRepository tradeRepository;
 
     public void save (Trade trade) {
-
+        int tradeId = tradeRepository.save(trade);
+        trade.setTradeId(tradeId);
     }
 }
